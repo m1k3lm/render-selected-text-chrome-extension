@@ -1,5 +1,5 @@
-chrome.runtime.onInstalled.addListener(function() {
-  chrome.contextMenus.create({
+chrome.runtime.onStartup.addListener(function() {
+  chrome.contextMenus.update({
     id: "renderSelectedText",
     title: "Render selected text",
     contexts: ["selection"]
