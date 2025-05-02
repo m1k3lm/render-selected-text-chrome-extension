@@ -25,7 +25,7 @@ function renderHTML(text) {
   layer.appendChild(content);
 }
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessageExternal.addListener(function(request, sender, sendResponse) {
   if (request.action === 'renderSelectedText') {
     renderHTML(request.text);
   }
