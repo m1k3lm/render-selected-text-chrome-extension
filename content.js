@@ -25,8 +25,12 @@ function renderHTML(text) {
   layer.appendChild(content);
 }
 
-chrome.runtime.onMessageExternal.addListener(function(request, sender, sendResponse) {
-  if (request.action === 'renderSelectedText') {
-    renderHTML(request.text);
-  }
-});
+if (chrome.runtime.onMessage) {
+  chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+    if (request.action === 'renderSelectedText') {
+      renderHTML(request.text);
+    }
+  });
+} else {
+  console.error('chrome.runtime.onMessage is undefined');
+}
