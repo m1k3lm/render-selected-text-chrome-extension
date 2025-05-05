@@ -1,8 +1,12 @@
-chrome.runtime.onStartup.addListener(function() {
-  chrome.contextMenus.update({
+chrome.runtime.onInstalled.addListener(function() {
+  chrome.contextMenus.create({
     id: "renderSelectedText",
     title: "Render selected text",
     contexts: ["selection"]
+  }, function() {
+    if (chrome.runtime.lastError) {
+      console.error("Error al crear el menú contextual:", chrome.runtime.lastError);
+    }
   });
 });
 
