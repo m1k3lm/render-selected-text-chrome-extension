@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test JSON Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .test-section {
+      margin: 30px 0;
+      padding: 20px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+    }
+    h2 {
+      color: #333;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+    pre {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .instruction {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+      border-left: 4px solid #2196F3;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 Test JSON Viewer</h1>
+
+  <div class="instruction">
+    <strong>Instructions:</strong> Select any JSON text below and right-click → "Render selected text" to test the new expandable tree viewer!
+  </div>
+
+  <div class="test-section">
+    <h2>Test 1: Simple Object (Your Example)</h2>
+    <pre>{
+  "order_ref_1": "L8WfqrJbbUMN5mQg38ee52bYE2oBRD9Lk839Hj1"
+}</pre>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 2: Nested Object</h2>
+    <pre>{
+  "user": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "age": 30,
+    "active": true
+  },
+  "address": {
+    "street": "123 Main St",
+    "city": "New York",
+    "zip": "10001"
+  }
+}</pre>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 3: Array of Objects</h2>
+    <pre>{
+  "users": [
+    {
+      "id": 1,
+      "name": "Alice",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Bob",
+      "role": "user"
+    },
+    {
+      "id": 3,
+      "name": "Charlie",
+      "role": "moderator"
+    }
+  ]
+}</pre>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 4: Complex Nested Structure</h2>
+    <pre>{
+  "data": {
+    "orders": [
+      {
+        "order_id": "ORD-001",
+        "customer": {
+          "name": "Jane Smith",
+          "email": "jane@example.com"
+        },
+        "items": [
+          {"product": "Laptop", "price": 999.99, "qty": 1},
+          {"product": "Mouse", "price": 29.99, "qty": 2}
+        ],
+        "total": 1059.97,
+        "paid": true
+      },
+      {
+        "order_id": "ORD-002",
+        "customer": {
+          "name": "John Doe",
+          "email": "john@example.com"
+        },
+        "items": [
+          {"product": "Keyboard", "price": 79.99, "qty": 1}
+        ],
+        "total": 79.99,
+        "paid": false
+      }
+    ],
+    "metadata": {
+      "total_orders": 2,
+      "timestamp": "2024-01-15T10:30:00Z",
+      "version": "1.0"
+    }
+  }
+}</pre>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 5: Array with Mixed Types</h2>
+    <pre>[
+  "string value",
+  42,
+  true,
+  false,
+  null,
+  {"nested": "object"},
+  [1, 2, 3]
+]</pre>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 6: Ruby Hash (will be converted)</h2>
+    <pre>{:name=>"Product", :price=>29.99, :available=>true, :categories=>["electronics", "gadgets"]}</pre>
+  </div>
+
+  <div class="test-section">
+    <h2>Test 7: PHP Array (will be converted)</h2>
+    <pre>array('name' => 'Product', 'price' => 29.99, 'items' => array('item1', 'item2', 'item3'))</pre>
+  </div>
+
+</body>
+</html>

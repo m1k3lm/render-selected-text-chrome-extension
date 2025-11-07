@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quick Parser Test</title>
+</head>
+<body>
+  <h1>Quick Parser Test</h1>
+  <pre id="output"></pre>
+
+  <!-- Load parsers -->
+  <script src="../parsers/json-parser.js"></script>
+  <script src="../parsers/ruby-parser.js"></script>
+  <script src="../parsers/php-parser.js"></script>
+
+  <script>
+    const output = document.getElementById('output');
+    let results = '';
+
+    function test(name, parser, input, expected) {
+      try {
+        const result = parser.parse(input);
+        const passed = JSON.stringify(result) === JSON.stringify(expected);
+        results += `${passed ? '✓' : '✗'} ${name}\n`;
+        if (!passed) {
+          results += `  Expected: ${JSON.stringify(expected)}\n`;
+          results += `  Got: ${JSON.stringify(result)}\n`;
+        }
+      } catch (e) {
+        results += `✗ ${name} - Error: ${e.message}\n`;
+      }
+    }
+
+    // Test PHP Parser with nested arrays
+    test('PHP nested arrays', PHPParser,
+      "array(array(1, 2), array(3, 4))",
+      [[1, 2], [3, 4]]
+    );
+
+    test('PHP associative with nested',PHPParser,
+      "array('numbers' => array(1, 2, 3), 'letters' => array('a', 'b'))",
+      { numbers: [1, 2, 3], letters: ['a', 'b'] }
+    );
+
+    test('PHP simple array', PHPParser,
+      "array('name' => 'John', 'age' => 30)",
+      { name: 'John', age: 30 }
+    );
+
+    // Test Ruby Parser
+    test('Ruby nested', RubyParser,
+      '{:user=>{:name=>"John", :age=>30}}',
+      { user: { name: 'John', age: 30 } }
+    );
+
+    test('Ruby array', RubyParser,
+      '[1, 2, 3]',
+      [1, 2, 3]
+    );
+
+    // Test JSON Parser
+    test('JSON nested', JSONParser,
+      '{"a":{"b":{"c":"value"}}}',
+      { a: { b: { c: 'value' } } }
+    );
+
+    output.textContent = results;
+    console.log(results);
+  </script>
+</body>
+</html>

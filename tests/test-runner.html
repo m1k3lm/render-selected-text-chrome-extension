@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parser Tests - Render Selected Text Extension</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 900px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .content {
+      padding: 32px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    .console-output {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Courier New', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      max-height: 500px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .console-output:empty::before {
+      content: 'Click "Run Tests" to start testing...';
+      color: #808080;
+      font-style: italic;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .status.pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status.running {
+      background: #dbeafe;
+      color: #1e40af;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .status.passed {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status.failed {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .footer {
+      text-align: center;
+      padding: 24px;
+      background: #f9fafb;
+      color: #6b7280;
+      font-size: 0.85rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .scrollbar::-webkit-scrollbar-track {
+      background: #2d2d2d;
+      border-radius: 4px;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 4px;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🧪 Parser Test Suite</h1>
+      <p>Render Selected Text Chrome Extension</p>
+    </div>
+
+    <div class="content">
+      <div class="button-group">
+        <button class="btn-primary" onclick="runTests()">▶ Run Tests</button>
+        <button class="btn-secondary" onclick="clearConsole()">Clear Console</button>
+      </div>
+
+      <div id="status" class="status pending">Ready to run tests</div>
+
+      <div id="console" class="console-output scrollbar"></div>
+    </div>
+
+    <div class="footer">
+      Open browser console (F12) for detailed output
+    </div>
+  </div>
+
+  <!-- Load parsers -->
+  <script src="../parsers/json-parser.js"></script>
+  <script src="../parsers/ruby-parser.js"></script>
+  <script src="../parsers/php-parser.js"></script>
+
+  <!-- Load test framework -->
+  <script src="test-framework.js"></script>
+
+  <!-- Load tests -->
+  <script src="json-parser.test.js"></script>
+  <script src="ruby-parser.test.js"></script>
+  <script src="php-parser.test.js"></script>
+
+  <script>
+    const consoleOutput = document.getElementById('console');
+    const statusBadge = document.getElementById('status');
+
+    // Override console methods to display in the page
+    const originalLog = console.log;
+    const originalError = console.error;
+
+    function appendToConsole(message, type = 'log') {
+      const line = document.createElement('div');
+      line.textContent = message;
+
+      if (type === 'error') {
+        line.style.color = '#f87171';
+      } else if (message.includes('✓')) {
+        line.style.color = '#4ade80';
+      } else if (message.includes('✗')) {
+        line.style.color = '#f87171';
+      } else if (message.includes('📦')) {
+        line.style.color = '#60a5fa';
+        line.style.fontWeight = 'bold';
+        line.style.marginTop = '12px';
+      } else if (message.includes('🎉')) {
+        line.style.color = '#4ade80';
+        line.style.fontWeight = 'bold';
+      } else if (message.includes('❌')) {
+        line.style.color = '#f87171';
+        line.style.fontWeight = 'bold';
+      } else if (message.includes('═')) {
+        line.style.color = '#9ca3af';
+      }
+
+      consoleOutput.appendChild(line);
+      consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    }
+
+    console.log = function(...args) {
+      originalLog.apply(console, args);
+      appendToConsole(args.join(' '), 'log');
+    };
+
+    console.error = function(...args) {
+      originalError.apply(console, args);
+      appendToConsole(args.join(' '), 'error');
+    };
+
+    async function runTests() {
+      clearConsole();
+      statusBadge.textContent = 'Running tests...';
+      statusBadge.className = 'status running';
+
+      try {
+        await TestFramework.run();
+
+        if (TestFramework.stats.failed === 0) {
+          statusBadge.textContent = `✓ All ${TestFramework.stats.passed} tests passed`;
+          statusBadge.className = 'status passed';
+        } else {
+          statusBadge.textContent = `✗ ${TestFramework.stats.failed} test(s) failed`;
+          statusBadge.className = 'status failed';
+        }
+      } catch (error) {
+        console.error('Test runner error:', error);
+        statusBadge.textContent = '✗ Test runner error';
+        statusBadge.className = 'status failed';
+      }
+    }
+
+    function clearConsole() {
+      consoleOutput.innerHTML = '';
+      statusBadge.textContent = 'Ready to run tests';
+      statusBadge.className = 'status pending';
+    }
+
+    // Auto-run tests on page load (optional)
+    // window.addEventListener('DOMContentLoaded', runTests);
+  </script>
+</body>
+</html>
