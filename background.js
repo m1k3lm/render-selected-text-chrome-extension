@@ -10,11 +10,34 @@ chrome.runtime.onInstalled.addListener(function() {
   });
 });
 
-chrome.contextMenus.onClicked.addListener(function(info, tab) {
+chrome.contextMenus.onClicked.addListener(async function(info, tab) {
   if (info.menuItemId === "renderSelectedText") {
-    chrome.tabs.sendMessage(tab.id, { action: "renderSelectedText", text: info.selectionText })
-      .catch(error => {
-        console.log('Cannot render on this page:', error.message);
+    try {
+      // Inject CSS
+      await chrome.scripting.insertCSS({
+        target: { tabId: tab.id },
+        files: ["styles.css"]
       });
+
+      // Inject scripts in order
+      await chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        files: [
+          "parsers/json-parser.js",
+          "parsers/ruby-parser.js",
+          "parsers/php-parser.js",
+          "renderers.js",
+          "content.js"
+        ]
+      });
+
+      // Send message to render the selected text
+      await chrome.tabs.sendMessage(tab.id, { 
+        action: "renderSelectedText", 
+        text: info.selectionText 
+      });
+    } catch (error) {
+      console.log('Cannot render on this page:', error.message);
+    }
   }
 });

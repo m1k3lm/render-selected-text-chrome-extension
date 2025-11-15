@@ -1,26 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "Render Selected Text",
+  "name": "PrettyData",
   "version": "1.0",
   "permissions": [
     "contextMenus",
-    "activeTab"
+    "activeTab",
+    "scripting"
   ],
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "css": ["styles.css"],
-      "js": [
-        "parsers/json-parser.js",
-        "parsers/ruby-parser.js",
-        "parsers/php-parser.js",
-        "renderers.js",
-        "content.js"
-      ]
-    }
-  ],
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",

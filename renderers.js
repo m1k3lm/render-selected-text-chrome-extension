@@ -1,72 +1,77 @@
-class BaseRenderer {
-  createLayer() {
-    const layer = document.createElement('div');
-    layer.className = 'rst-overlay';
-    layer.id = 'rendered-html-layer';
+if (typeof BaseRenderer === 'undefined') {
+  window.BaseRenderer = class {
+    createLayer() {
+      const layer = document.createElement('div');
+      layer.className = 'rst-overlay';
+      layer.id = 'rendered-html-layer';
 
-    const innerLayer = document.createElement('div');
-    innerLayer.className = 'rst-inner-layer';
+      const innerLayer = document.createElement('div');
+      innerLayer.className = 'rst-inner-layer';
 
-    const title = document.createElement('div');
-    title.className = 'rst-header-title';
-    title.innerHTML = '<span class="rst-title-icon">📄</span> Rendered Content <span class="rst-esc-hint">Press ESC to close</span>';
-    innerLayer.appendChild(title);
+      const title = document.createElement('div');
+      title.className = 'rst-header-title';
+      title.innerHTML = '<span class="rst-title-icon">📄</span> Rendered Content <span class="rst-esc-hint">Press ESC to close</span>';
+      innerLayer.appendChild(title);
 
-    const closeLayer = () => {
-      layer.classList.add('rst-closing');
-      setTimeout(() => layer.remove(), 200);
-    };
+      const closeLayer = () => {
+        layer.classList.add('rst-closing');
+        setTimeout(() => layer.remove(), 200);
+      };
 
-    const closeButton = document.createElement('button');
-    closeButton.innerHTML = '&times;';
-    closeButton.className = 'rst-close-button';
-    closeButton.title = 'Close (ESC)';
-    closeButton.addEventListener('click', closeLayer);
+      const closeButton = document.createElement('button');
+      closeButton.innerHTML = '&times;';
+      closeButton.className = 'rst-close-button';
+      closeButton.title = 'Close (ESC)';
+      closeButton.addEventListener('click', closeLayer);
 
-    const handleKeyPress = (e) => {
-      if (e.key === 'Escape') {
-        closeLayer();
-        document.removeEventListener('keydown', handleKeyPress);
-      }
-    };
-    document.addEventListener('keydown', handleKeyPress);
+      const handleKeyPress = (e) => {
+        if (e.key === 'Escape') {
+          closeLayer();
+          document.removeEventListener('keydown', handleKeyPress);
+        }
+      };
+      document.addEventListener('keydown', handleKeyPress);
 
-    innerLayer.appendChild(closeButton);
-    layer.appendChild(innerLayer);
-    document.body.appendChild(layer);
-    return innerLayer;
-  }
-
-  unescapeHTML(text) {
-    const temp = document.createElement('textarea');
-    temp.innerHTML = text;
-    return temp.value;
-  }
-}
-
-class HTMLRenderer extends BaseRenderer {
-  render(text) {
-    const innerLayer = this.createLayer();
-    const content = document.createElement('div');
-    content.className = 'rst-content rst-html-content';
-
-    let processedText = text;
-    const looksEscaped = /\\["nrt\\]/.test(text);
-    if (looksEscaped) {
-      let toParse = text.replace(/\\[nrt]/g, '').replace(/\\\\/g, "\\");
-      if (!(toParse.startsWith('"') && toParse.endsWith('"')) &&
-          !(toParse.startsWith("'") && toParse.endsWith("'"))) {
-        toParse = '"' + toParse.replace(/"/g, '\\"') + '"';
-      }
-      processedText = text;
+      innerLayer.appendChild(closeButton);
+      layer.appendChild(innerLayer);
+      document.body.appendChild(layer);
+      return innerLayer;
     }
 
-    content.innerHTML = processedText;
-    innerLayer.appendChild(content);
-  }
+    unescapeHTML(text) {
+      const temp = document.createElement('textarea');
+      temp.innerHTML = text;
+      return temp.value;
+    }
+  };
 }
 
-class JSONRenderer extends BaseRenderer {
+if (typeof HTMLRenderer === 'undefined') {
+  window.HTMLRenderer = class extends BaseRenderer {
+    render(text) {
+      const innerLayer = this.createLayer();
+      const content = document.createElement('div');
+      content.className = 'rst-content rst-html-content';
+
+      let processedText = text;
+      const looksEscaped = /\\["nrt\\]/.test(text);
+      if (looksEscaped) {
+        let toParse = text.replace(/\\[nrt]/g, '').replace(/\\\\/g, "\\");
+        if (!(toParse.startsWith('"') && toParse.endsWith('"')) &&
+            !(toParse.startsWith("'") && toParse.endsWith("'"))) {
+          toParse = '"' + toParse.replace(/"/g, '\\"') + '"';
+        }
+        processedText = text;
+      }
+
+      content.innerHTML = processedText;
+      innerLayer.appendChild(content);
+    }
+  };
+}
+
+if (typeof JSONRenderer === 'undefined') {
+  window.JSONRenderer = class extends BaseRenderer {
   render(jsonObj) {
     const innerLayer = this.createLayer();
     const content = document.createElement('div');
@@ -304,4 +309,5 @@ class JSONRenderer extends BaseRenderer {
     icon.textContent = isExpanded ? '▼' : '▶';
     return icon;
   }
+  };
 }
