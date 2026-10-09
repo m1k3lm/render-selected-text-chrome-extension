@@ -248,6 +248,159 @@
     0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+/* ===== MARKDOWN CONTENT ===== */
+
+.rst-markdown-content {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #1f2328;
+  text-align: left;
+}
+
+.rst-markdown-content > :first-child {
+  margin-top: 0;
+}
+
+.rst-markdown-content h1,
+.rst-markdown-content h2,
+.rst-markdown-content h3,
+.rst-markdown-content h4,
+.rst-markdown-content h5,
+.rst-markdown-content h6 {
+  margin: 24px 0 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #1f2328;
+}
+
+.rst-markdown-content h1,
+.rst-markdown-content h2 {
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #d0d7de;
+}
+
+.rst-markdown-content h1 { font-size: 2em; }
+.rst-markdown-content h2 { font-size: 1.5em; }
+
+.rst-markdown-content h3 { font-size: 1.25em; }
+.rst-markdown-content h4 { font-size: 1em; }
+.rst-markdown-content h5 { font-size: 0.875em; }
+.rst-markdown-content h6 { font-size: 0.85em; color: #59636e; }
+
+.rst-markdown-content p,
+.rst-markdown-content ul,
+.rst-markdown-content ol,
+.rst-markdown-content blockquote,
+.rst-markdown-content pre,
+.rst-markdown-content table {
+  margin: 0 0 16px;
+}
+
+.rst-markdown-content ul,
+.rst-markdown-content ol {
+  padding-left: 2em;
+}
+
+.rst-markdown-content ul {
+  list-style: disc;
+}
+
+.rst-markdown-content ol {
+  list-style: decimal;
+}
+
+.rst-markdown-content li + li {
+  margin-top: 0.25em;
+}
+
+.rst-markdown-content li > ul,
+.rst-markdown-content li > ol {
+  margin: 0.25em 0 0;
+}
+
+.rst-markdown-content .rst-task-item {
+  list-style: none;
+}
+
+.rst-markdown-content .rst-task-item input {
+  margin: 0 0.4em 0.2em -1.4em;
+  vertical-align: middle;
+}
+
+.rst-markdown-content a {
+  color: #667eea;
+  text-decoration: underline;
+}
+
+.rst-markdown-content code {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+  font-size: 85%;
+  padding: 0.2em 0.4em;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 6px;
+  color: #1f2328;
+}
+
+.rst-markdown-content pre {
+  padding: 16px;
+  overflow: auto;
+  background: #2d2d2d;
+  border-radius: 8px;
+  line-height: 1.45;
+}
+
+.rst-markdown-content pre code {
+  padding: 0;
+  background: transparent;
+  color: #f8f8f2;
+  white-space: pre;
+}
+
+.rst-markdown-content blockquote {
+  padding: 0 1em;
+  color: #59636e;
+  border-left: 4px solid #764ba2;
+}
+
+.rst-markdown-content hr {
+  height: 2px;
+  margin: 24px 0;
+  border: 0;
+  background: #d0d7de;
+}
+
+.rst-markdown-content table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+  border-collapse: collapse;
+}
+
+.rst-markdown-content th,
+.rst-markdown-content td {
+  padding: 6px 13px;
+  border: 1px solid #d0d7de;
+}
+
+.rst-markdown-content th {
+  font-weight: 600;
+  background: rgba(102, 126, 234, 0.08);
+}
+
+.rst-markdown-content tr:nth-child(2n) td {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.rst-markdown-content .rst-align-left { text-align: left; }
+.rst-markdown-content .rst-align-center { text-align: center; }
+.rst-markdown-content .rst-align-right { text-align: right; }
+
+.rst-markdown-content img {
+  max-width: 100%;
+}
+
 /* ===== JSON TREE STRUCTURE ===== */
 
 .rst-json-container {
@@ -546,7 +699,9 @@
 .rst-inner-layer::-webkit-scrollbar,
 .rst-content::-webkit-scrollbar,
 .rst-html-content::-webkit-scrollbar,
-.rst-json-content::-webkit-scrollbar {
+.rst-json-content::-webkit-scrollbar,
+.rst-markdown-content pre::-webkit-scrollbar,
+.rst-markdown-content table::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
@@ -554,7 +709,9 @@
 .rst-inner-layer::-webkit-scrollbar-track,
 .rst-content::-webkit-scrollbar-track,
 .rst-html-content::-webkit-scrollbar-track,
-.rst-json-content::-webkit-scrollbar-track {
+.rst-json-content::-webkit-scrollbar-track,
+.rst-markdown-content pre::-webkit-scrollbar-track,
+.rst-markdown-content table::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.02);
   border-radius: 10px;
   margin: 4px;
@@ -563,7 +720,9 @@
 .rst-inner-layer::-webkit-scrollbar-thumb,
 .rst-content::-webkit-scrollbar-thumb,
 .rst-html-content::-webkit-scrollbar-thumb,
-.rst-json-content::-webkit-scrollbar-thumb {
+.rst-json-content::-webkit-scrollbar-thumb,
+.rst-markdown-content pre::-webkit-scrollbar-thumb,
+.rst-markdown-content table::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 10px;
   border: 2px solid transparent;
@@ -574,7 +733,9 @@
 .rst-inner-layer::-webkit-scrollbar-thumb:hover,
 .rst-content::-webkit-scrollbar-thumb:hover,
 .rst-html-content::-webkit-scrollbar-thumb:hover,
-.rst-json-content::-webkit-scrollbar-thumb:hover {
+.rst-json-content::-webkit-scrollbar-thumb:hover,
+.rst-markdown-content pre::-webkit-scrollbar-thumb:hover,
+.rst-markdown-content table::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
   background-clip: content-box;
   box-shadow: 0 0 6px rgba(102, 126, 234, 0.4);
@@ -583,7 +744,9 @@
 .rst-inner-layer::-webkit-scrollbar-thumb:active,
 .rst-content::-webkit-scrollbar-thumb:active,
 .rst-html-content::-webkit-scrollbar-thumb:active,
-.rst-json-content::-webkit-scrollbar-thumb:active {
+.rst-json-content::-webkit-scrollbar-thumb:active,
+.rst-markdown-content pre::-webkit-scrollbar-thumb:active,
+.rst-markdown-content table::-webkit-scrollbar-thumb:active {
   background: linear-gradient(135deg, #5568d3 0%, #653a8b 100%);
   background-clip: content-box;
 }
