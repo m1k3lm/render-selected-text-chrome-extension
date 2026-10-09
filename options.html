@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Render Selected Text · Settings</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main>
+    <fieldset class="theme-picker">
+      <legend>Popup theme</legend>
+      <label><input type="radio" name="theme" value="dark"> Dark</label>
+      <label><input type="radio" name="theme" value="light"> Light</label>
+      <label><input type="radio" name="theme" value="system"> Match system</label>
+      <label><input type="radio" name="theme" value="unicorn"> Unicorn 🦄</label>
+    </fieldset>
+
+    <div id="preview" class="preview" data-rst-theme="dark" aria-label="Theme preview">
+      <div class="rst-inner-layer">
+        <div class="rst-titlebar">
+          <div class="rst-window-controls">
+            <span class="rst-close-button"></span><span class="rst-window-dot"></span><span class="rst-window-dot"></span>
+          </div>
+          <div class="rst-header-title">render-selected-text — json</div>
+          <kbd class="rst-esc-hint">esc</kbd>
+        </div>
+        <div id="preview-content" class="rst-content rst-json-content">
+          <div class="rst-prompt"><span class="rst-prompt-symbol">$</span> render --format=json</div>
+        </div>
+      </div>
+    </div>
+
+    <p id="status" class="status" role="status"></p>
+  </main>
+
+  <script src="settings.js"></script>
+  <script src="renderers.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

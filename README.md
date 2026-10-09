@@ -27,6 +27,10 @@ Automatically detects and parses:
 - **Markdown** - Headings, lists, tables, code blocks and more (raw HTML inside is shown as text)
 - **HTML** - Raw HTML content
 
+### 🖥️ **Terminal-Style Popup**
+- Monospace, console-like window with dark and light themes
+- Pick **Dark**, **Light**, **Match system** or **Unicorn** (the original purple gradient look) in the extension options (Extensions menu → Render Selected Text → Options)
+
 ### 🚀 **Smart Parsing**
 - Nested structures of any depth
 - Mixed data types
