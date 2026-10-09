@@ -24,6 +24,7 @@ Automatically detects and parses:
 - **JSON** - Standard JSON objects and arrays
 - **Ruby** - Ruby hashes with symbols (`:key=>value`)
 - **PHP** - PHP arrays (`array('key' => 'value')`)
+- **Markdown** - Headings, lists, tables, code blocks and more (raw HTML inside is shown as text)
 - **HTML** - Raw HTML content
 
 ### 🚀 **Smart Parsing**

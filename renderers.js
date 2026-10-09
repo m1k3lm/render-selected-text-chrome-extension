@@ -38,6 +38,14 @@ if (typeof BaseRenderer === 'undefined') {
       return innerLayer;
     }
 
+    mountHTML(html, contentClass) {
+      const innerLayer = this.createLayer();
+      const content = document.createElement('div');
+      content.className = `rst-content ${contentClass}`;
+      content.innerHTML = html;
+      innerLayer.appendChild(content);
+    }
+
     unescapeHTML(text) {
       const temp = document.createElement('textarea');
       temp.innerHTML = text;
@@ -49,10 +57,6 @@ if (typeof BaseRenderer === 'undefined') {
 if (typeof HTMLRenderer === 'undefined') {
   window.HTMLRenderer = class extends BaseRenderer {
     render(text) {
-      const innerLayer = this.createLayer();
-      const content = document.createElement('div');
-      content.className = 'rst-content rst-html-content';
-
       let processedText = text;
       const looksEscaped = /\\["nrt\\]/.test(text);
       if (looksEscaped) {
@@ -64,8 +68,7 @@ if (typeof HTMLRenderer === 'undefined') {
         processedText = text;
       }
 
-      content.innerHTML = processedText;
-      innerLayer.appendChild(content);
+      this.mountHTML(processedText, 'rst-html-content');
     }
   };
 }
@@ -309,5 +312,13 @@ if (typeof JSONRenderer === 'undefined') {
     icon.textContent = isExpanded ? '▼' : '▶';
     return icon;
   }
+  };
+}
+
+if (typeof MarkdownRenderer === 'undefined') {
+  window.MarkdownRenderer = class extends BaseRenderer {
+    render(markdown) {
+      this.mountHTML(MarkdownParser.toHTML(markdown), 'rst-html-content rst-markdown-content');
+    }
   };
 }
