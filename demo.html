@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Render Selected Text - Demo Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      font-size: 42px;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .subtitle {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 18px;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    .instructions {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .instructions h2 {
+      color: #667eea;
+      margin-bottom: 15px;
+      font-size: 24px;
+    }
+
+    .instructions ol {
+      color: #333;
+      line-height: 1.8;
+      padding-left: 20px;
+    }
+
+    .instructions li {
+      margin-bottom: 8px;
+    }
+
+    .instructions code {
+      background: #f5f5f5;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .demo-section {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .demo-section h2 {
+      color: #667eea;
+      margin-bottom: 10px;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .demo-section .icon {
+      font-size: 32px;
+    }
+
+    .demo-section p {
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    .code-block {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 25px;
+      border-radius: 12px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+      cursor: text;
+      user-select: text;
+      position: relative;
+    }
+
+    .code-block::before {
+      content: 'Click to select, then right-click → "Render selected text"';
+      position: absolute;
+      top: -30px;
+      left: 0;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .code-wrapper {
+      position: relative;
+      padding-top: 35px;
+    }
+
+    .label {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      letter-spacing: 0.5px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .feature-card {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 4px solid #667eea;
+    }
+
+    .feature-card h3 {
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .feature-card p {
+      color: #666;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .footer {
+      text-align: center;
+      color: white;
+      margin-top: 50px;
+      padding: 20px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .footer a {
+      color: white;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 32px;
+      }
+
+      .demo-section h2 {
+        font-size: 22px;
+      }
+
+      .code-block {
+        font-size: 12px;
+        padding: 15px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📄 Render Selected Text</h1>
+    <p class="subtitle">Demo Page - Test the Extension</p>
+
+    <div class="instructions">
+      <h2>🎯 How to Use This Demo</h2>
+      <ol>
+        <li>Make sure the <strong>Render Selected Text</strong> extension is installed and enabled</li>
+        <li><strong>Select</strong> any code block below (click and drag to select the text)</li>
+        <li><strong>Right-click</strong> on the selected text</li>
+        <li>Choose <code>Render selected text</code> from the context menu</li>
+        <li>Enjoy the beautiful visualization! Press <code>ESC</code> to close</li>
+      </ol>
+    </div>
+
+    <!-- JSON Example -->
+    <div class="demo-section">
+      <h2><span class="icon">📦</span> JSON Object</h2>
+      <p>A typical API response with user data, nested objects, and arrays</p>
+      <span class="label">JSON Format</span>
+      <div class="code-wrapper">
+        <div class="code-block">{"user":{"id":12345,"name":"Sarah Johnson","email":"sarah.johnson@example.com","role":"developer","verified":true,"profile":{"avatar":"https://example.com/avatar.jpg","bio":"Full-stack developer passionate about clean code","location":"San Francisco, CA","website":"https://sarahjohnson.dev","social":{"twitter":"@sarahcodes","github":"sarahj","linkedin":"sarah-johnson"}},"stats":{"repositories":42,"followers":1337,"following":89,"contributions":2845},"preferences":{"theme":"dark","notifications":true,"language":"en-US","timezone":"America/Los_Angeles"},"projects":[{"id":1,"name":"awesome-app","description":"An awesome web application","stars":256,"language":"JavaScript","private":false},{"id":2,"name":"data-viz","description":"Data visualization library","stars":892,"language":"TypeScript","private":false},{"id":3,"name":"secret-project","description":"Top secret project","stars":0,"language":"Python","private":true}],"lastLogin":"2025-01-15T14:30:00Z","accountCreated":"2020-03-20T10:15:00Z","isPremium":true,"credits":null}}</div>
+      </div>
+    </div>
+
+    <!-- Ruby Example -->
+    <div class="demo-section">
+      <h2><span class="icon">💎</span> Ruby Hash</h2>
+      <p>Ruby hash syntax with symbols and hash rocket notation</p>
+      <span class="label">Ruby Format</span>
+      <div class="code-wrapper">
+        <div class="code-block">{:restaurant => {:name => "The Golden Spoon", :cuisine => "Italian", :rating => 4.8, :address => {:street => "123 Main Street", :city => "New York", :state => "NY", :zip => "10001", :coordinates => {:latitude => 40.7589, :longitude => -73.9851}}, :contact => {:phone => "+1-555-0123", :email => "info@goldenspoon.com", :website => "https://goldenspoon.com"}, :hours => {:monday => "11:00 AM - 10:00 PM", :tuesday => "11:00 AM - 10:00 PM", :wednesday => "11:00 AM - 10:00 PM", :thursday => "11:00 AM - 11:00 PM", :friday => "11:00 AM - 11:00 PM", :saturday => "10:00 AM - 11:00 PM", :sunday => "10:00 AM - 9:00 PM"}, :menu => [{:id => 1, :name => "Spaghetti Carbonara", :price => 18.99, :vegetarian => false, :description => "Classic Italian pasta with eggs, cheese, and pancetta"}, {:id => 2, :name => "Margherita Pizza", :price => 14.99, :vegetarian => true, :description => "Fresh tomatoes, mozzarella, and basil"}, {:id => 3, :name => "Tiramisu", :price => 8.99, :vegetarian => true, :description => "Traditional Italian dessert with coffee and mascarpone"}], :features => [:outdoor_seating, :wifi, :reservations, :delivery, :takeout], :open_now => true, :accepts_credit_cards => true, :parking => nil}}</div>
+      </div>
+    </div>
+
+    <!-- PHP Example -->
+    <div class="demo-section">
+      <h2><span class="icon">🐘</span> PHP Array</h2>
+      <p>PHP array syntax with nested structures and stdClass objects</p>
+      <span class="label">PHP Format</span>
+      <div class="code-wrapper">
+        <div class="code-block">array('ecommerce' => array('order' => array('orderId' => 'ORD-2025-001234', 'orderDate' => '2025-01-15 14:30:00', 'status' => 'shipped', 'customer' => array('customerId' => 'CUST-5678', 'firstName' => 'Michael', 'lastName' => 'Chen', 'email' => 'michael.chen@email.com', 'phone' => '+1-555-0199', 'shippingAddress' => array('street' => '456 Oak Avenue', 'apt' => 'Suite 200', 'city' => 'Seattle', 'state' => 'WA', 'zipCode' => '98101', 'country' => 'USA'), 'billingAddress' => array('street' => '456 Oak Avenue', 'apt' => 'Suite 200', 'city' => 'Seattle', 'state' => 'WA', 'zipCode' => '98101', 'country' => 'USA')), 'items' => array(array('productId' => 'PROD-1001', 'name' => 'Wireless Headphones', 'sku' => 'WH-BT-500', 'quantity' => 2, 'price' => 79.99, 'discount' => 10.00, 'total' => 149.98), array('productId' => 'PROD-2045', 'name' => 'USB-C Cable', 'sku' => 'CBL-USBC-6FT', 'quantity' => 3, 'price' => 12.99, 'discount' => 0, 'total' => 38.97), array('productId' => 'PROD-3089', 'name' => 'Phone Case', 'sku' => 'CASE-IP14-BLK', 'quantity' => 1, 'price' => 24.99, 'discount' => 5.00, 'total' => 19.99)), 'pricing' => array('subtotal' => 208.94, 'tax' => 18.80, 'shipping' => 0, 'discount' => 15.00, 'total' => 212.74), 'payment' => array('method' => 'credit_card', 'cardType' => 'Visa', 'last4' => '4242', 'transactionId' => 'TXN-ABC123XYZ', 'paid' => true), 'shipping' => array('method' => 'express', 'carrier' => 'FedEx', 'trackingNumber' => '1Z999AA1234567890', 'estimatedDelivery' => '2025-01-18', 'actualDelivery' => NULL), 'notes' => 'Please leave package at front door', 'giftMessage' => NULL)))</div>
+      </div>
+    </div>
+
+    <!-- HTML Example -->
+    <div class="demo-section">
+      <h2><span class="icon">🌐</span> HTML Content</h2>
+      <p>HTML markup that will be rendered as live HTML in the overlay</p>
+      <span class="label">HTML Format</span>
+      <div class="code-wrapper">
+        <div class="code-block">&lt;div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;"&gt;
+  &lt;h1 style="color: #667eea; border-bottom: 3px solid #764ba2; padding-bottom: 10px;"&gt;Welcome to Our Platform&lt;/h1&gt;
+
+  &lt;p style="font-size: 16px; line-height: 1.6; color: #333;"&gt;
+    Thank you for joining our community! We're excited to have you here.
+  &lt;/p&gt;
+
+  &lt;div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; margin: 20px 0;"&gt;
+    &lt;h2 style="margin-top: 0;"&gt;🎉 Special Offer&lt;/h2&gt;
+    &lt;p&gt;Get &lt;strong&gt;50% off&lt;/strong&gt; your first month with code: &lt;code style="background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 5px; font-size: 18px;"&gt;WELCOME50&lt;/code&gt;&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;h3 style="color: #667eea;"&gt;Quick Start Guide&lt;/h3&gt;
+
+  &lt;ol style="line-height: 1.8; color: #555;"&gt;
+    &lt;li&gt;&lt;strong&gt;Complete your profile&lt;/strong&gt; - Add your information&lt;/li&gt;
+    &lt;li&gt;&lt;strong&gt;Explore features&lt;/strong&gt; - Check out our dashboard&lt;/li&gt;
+    &lt;li&gt;&lt;strong&gt;Connect with others&lt;/strong&gt; - Join the community&lt;/li&gt;
+    &lt;li&gt;&lt;strong&gt;Start creating&lt;/strong&gt; - Begin your first project&lt;/li&gt;
+  &lt;/ol&gt;
+
+  &lt;table style="width: 100%; border-collapse: collapse; margin: 20px 0;"&gt;
+    &lt;thead&gt;
+      &lt;tr style="background: #f5f5f5;"&gt;
+        &lt;th style="padding: 12px; text-align: left; border-bottom: 2px solid #667eea;"&gt;Feature&lt;/th&gt;
+        &lt;th style="padding: 12px; text-align: left; border-bottom: 2px solid #667eea;"&gt;Status&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;td style="padding: 10px; border-bottom: 1px solid #eee;"&gt;Dashboard Access&lt;/td&gt;
+        &lt;td style="padding: 10px; border-bottom: 1px solid #eee;"&gt;✅ Active&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td style="padding: 10px; border-bottom: 1px solid #eee;"&gt;API Integration&lt;/td&gt;
+        &lt;td style="padding: 10px; border-bottom: 1px solid #eee;"&gt;✅ Active&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+        &lt;td style="padding: 10px; border-bottom: 1px solid #eee;"&gt;Premium Support&lt;/td&gt;
+        &lt;td style="padding: 10px; border-bottom: 1px solid #eee;"&gt;⏳ Pending&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;blockquote style="border-left: 4px solid #667eea; padding-left: 20px; margin: 20px 0; font-style: italic; color: #666;"&gt;
+    "This is the best platform I've ever used. The interface is intuitive and the features are powerful!"
+    &lt;footer style="margin-top: 10px; font-style: normal; color: #999;"&gt;- Alex Rodriguez, Developer&lt;/footer&gt;
+  &lt;/blockquote&gt;
+
+  &lt;div style="text-align: center; margin-top: 30px;"&gt;
+    &lt;button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 15px 40px; font-size: 16px; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);"&gt;
+      Get Started Now →
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</div>
+      </div>
+    </div>
+
+    <!-- Markdown Example -->
+    <div class="demo-section">
+      <h2><span class="icon">📝</span> Markdown</h2>
+      <p>Release notes with headings, task lists, nested lists, a table, a code block and links</p>
+      <span class="label">Markdown Format</span>
+      <div class="code-wrapper">
+        <div class="code-block"># 🚀 Release Notes — v1.3
+
+Render Selected Text now understands **Markdown** and *TOON*, with a new terminal-style popup.
+
+## What's new
+- [x] Markdown rendering with tables and code blocks
+- [x] TOON decoding (Token-Oriented Object Notation)
+- [x] Dark, light, system and 🦄 unicorn themes
+- [ ] Syntax highlighting inside code blocks
+
+## Upgrade steps
+1. Open `chrome://extensions`
+2. Click **Reload** on the extension card
+3. Pick a theme in *Options*
+   - try ~~light~~ **unicorn** for the classic look
+
+&gt; **Tip:** raw HTML inside Markdown is shown as text, never executed.
+
+| Format   | Detected by        | Rendered as |
+|:---------|:-------------------|------------:|
+| JSON     | `JSON.parse`       | tree        |
+| TOON     | strict spec decode | tree        |
+| Markdown | structure signals  | rich text   |
+
+```js
+chrome.storage.sync.set({ theme: 'unicorn' });
+```
+
+Read more in the [TOON spec](https://github.com/toon-format/spec).</div>
+      </div>
+    </div>
+
+    <!-- TOON Example -->
+    <div class="demo-section">
+      <h2><span class="icon">🎒</span> TOON</h2>
+      <p>Token-Oriented Object Notation: a nested object, a table, an inline array, keyed rows and a list, decoded into a JSON tree</p>
+      <span class="label">TOON Format</span>
+      <div class="code-wrapper">
+        <div class="code-block"># Team dashboard snapshot
+team: Platform
+sprint:
+  number: 42
+  start: 2025-01-06
+  end: 2025-01-17
+members[3]{id,name,role,commits}:
+  1,Sarah Johnson,lead,128
+  2,Michael Chen,backend,96
+  3,Alex Rodriguez,frontend,74
+tags[4]: chrome,json,toon,markdown
+services[2:]{status,uptime}:
+  api: healthy,99.98
+  web: degraded,99.5
+incidents[2]:
+  - id: INC-101
+    title: Slow search queries
+    resolved: true
+  - id: INC-102
+    title: "Login timeout, EU region"
+    resolved: false
+    regions[2]: eu-west-1,eu-central-1</div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="instructions">
+      <h2>✨ What You'll See</h2>
+      <div class="features">
+        <div class="feature-card">
+          <h3>🌳 Interactive Tree</h3>
+          <p>Expand and collapse nested objects and arrays with beautiful animations</p>
+        </div>
+        <div class="feature-card">
+          <h3>🎨 Syntax Highlighting</h3>
+          <p>Color-coded by type - strings, numbers, booleans, and null values</p>
+        </div>
+        <div class="feature-card">
+          <h3>⌨️ Keyboard Shortcuts</h3>
+          <p>Press ESC to close the overlay instantly</p>
+        </div>
+        <div class="feature-card">
+          <h3>🎯 Smart Detection</h3>
+          <p>Automatically detects JSON, Ruby, PHP, TOON, Markdown, or HTML format</p>
+        </div>
+        <div class="feature-card">
+          <h3>💫 Beautiful Design</h3>
+          <p>Terminal-style popup with dark, light, system and unicorn themes</p>
+        </div>
+        <div class="feature-card">
+          <h3>🔒 Privacy First</h3>
+          <p>All processing happens in your browser - no data sent anywhere</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Made with ❤️ for developers | Render Selected Text Extension</p>
+      <p><a href="https://chrome.google.com/webstore" target="_blank">Get it on Chrome Web Store</a></p>
+    </div>
+  </div>
+</body>
+</html>
