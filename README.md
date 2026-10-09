@@ -2,7 +2,7 @@
 
 A powerful Chrome extension that renders selected text as beautifully formatted HTML or interactive JSON trees. Perfect for developers working with API responses, debugging data structures, or viewing formatted content.
 
-![Version](https://img.shields.io/badge/version-1.0-blue)
+![Version](https://img.shields.io/badge/version-2.0-blue)
 ![Manifest](https://img.shields.io/badge/manifest-v3-green)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen)
 
@@ -276,7 +276,15 @@ Then add it to `manifest.json` content_scripts and use it in `content.js`.
 
 ## 📝 Changelog
 
-### Version 1.0 (Current)
+### Version 2.0 (Current)
+- 📝 Markdown rendering: headings, task and nested lists, tables, code blocks, links
+- 🎒 TOON (Token-Oriented Object Notation) decoding, shown as a JSON tree
+- 🖥️ Terminal-style popup with Dark, Light, Match system and Unicorn themes
+- ⚙️ Options page to pick the theme, synced with `chrome.storage`
+- 🌳 JSON trees open two levels deep by default
+- 🧪 168 tests, plus the official TOON spec decode fixtures
+
+### Version 1.0
 - ✨ Initial release
 - 🎨 Beautiful JSON tree viewer
 - 🔄 Support for JSON, Ruby, PHP, and HTML
