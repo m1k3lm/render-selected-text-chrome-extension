@@ -27,6 +27,7 @@ chrome.contextMenus.onClicked.addListener(async function(info, tab) {
           "parsers/ruby-parser.js",
           "parsers/php-parser.js",
           "parsers/markdown-parser.js",
+          "settings.js",
           "renderers.js",
           "content.js"
         ]

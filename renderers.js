@@ -1,49 +1,69 @@
 if (typeof BaseRenderer === 'undefined') {
   window.BaseRenderer = class {
-    createLayer() {
-      const layer = document.createElement('div');
-      layer.className = 'rst-overlay';
+    /**
+     * Opens the terminal-style overlay window and returns its scrollable content element.
+     * @param {string} contentClass - Extra classes for the content element
+     * @param {{theme?: string, format?: string}} options - Theme name and source format label
+     * @returns {HTMLElement}
+     */
+    createLayer(contentClass, { theme = 'dark', format = 'text' } = {}) {
+      const layer = this._element('div', 'rst-overlay');
       layer.id = 'rendered-html-layer';
+      layer.dataset.rstTheme = theme;
 
-      const innerLayer = document.createElement('div');
-      innerLayer.className = 'rst-inner-layer';
-
-      const title = document.createElement('div');
-      title.className = 'rst-header-title';
-      title.innerHTML = '<span class="rst-title-icon">📄</span> Rendered Content <span class="rst-esc-hint">Press ESC to close</span>';
-      innerLayer.appendChild(title);
+      const innerLayer = this._element('div', 'rst-inner-layer');
+      innerLayer.setAttribute('role', 'dialog');
+      innerLayer.setAttribute('aria-label', `Rendered ${format}`);
 
       const closeLayer = () => {
+        document.removeEventListener('keydown', handleKeyPress);
         layer.classList.add('rst-closing');
-        setTimeout(() => layer.remove(), 200);
+        setTimeout(() => layer.remove(), 150);
       };
-
-      const closeButton = document.createElement('button');
-      closeButton.innerHTML = '&times;';
-      closeButton.className = 'rst-close-button';
-      closeButton.title = 'Close (ESC)';
-      closeButton.addEventListener('click', closeLayer);
-
       const handleKeyPress = (e) => {
-        if (e.key === 'Escape') {
-          closeLayer();
-          document.removeEventListener('keydown', handleKeyPress);
-        }
+        if (e.key === 'Escape') closeLayer();
       };
       document.addEventListener('keydown', handleKeyPress);
 
-      innerLayer.appendChild(closeButton);
+      const closeButton = this._element('button', 'rst-close-button');
+      closeButton.type = 'button';
+      closeButton.title = 'Close (Esc)';
+      closeButton.setAttribute('aria-label', 'Close');
+      closeButton.addEventListener('click', closeLayer);
+
+      const controls = this._element('div', 'rst-window-controls');
+      controls.append(closeButton, this._element('span', 'rst-window-dot'), this._element('span', 'rst-window-dot'));
+
+      const title = this._element('div', 'rst-header-title');
+      title.textContent = `render-selected-text \u2014 ${format}`;
+
+      const hint = this._element('kbd', 'rst-esc-hint');
+      hint.textContent = 'esc';
+
+      const titlebar = this._element('div', 'rst-titlebar');
+      titlebar.append(controls, title, hint);
+
+      const prompt = this._element('div', 'rst-prompt');
+      prompt.append(this._element('span', 'rst-prompt-symbol', '$'), ` render --format=${format}`);
+
+      const content = this._element('div', `rst-content ${contentClass}`);
+      content.appendChild(prompt);
+
+      innerLayer.append(titlebar, content);
       layer.appendChild(innerLayer);
       document.body.appendChild(layer);
-      return innerLayer;
+      return content;
     }
 
-    mountHTML(html, contentClass) {
-      const innerLayer = this.createLayer();
-      const content = document.createElement('div');
-      content.className = `rst-content ${contentClass}`;
-      content.innerHTML = html;
-      innerLayer.appendChild(content);
+    mountHTML(html, contentClass, options) {
+      this.createLayer(contentClass, options).insertAdjacentHTML('beforeend', html);
+    }
+
+    _element(tag, className, text) {
+      const element = document.createElement(tag);
+      element.className = className;
+      if (text) element.textContent = text;
+      return element;
     }
 
     unescapeHTML(text) {
@@ -56,7 +76,7 @@ if (typeof BaseRenderer === 'undefined') {
 
 if (typeof HTMLRenderer === 'undefined') {
   window.HTMLRenderer = class extends BaseRenderer {
-    render(text) {
+    render(text, options) {
       let processedText = text;
       const looksEscaped = /\\["nrt\\]/.test(text);
       if (looksEscaped) {
@@ -68,19 +88,15 @@ if (typeof HTMLRenderer === 'undefined') {
         processedText = text;
       }
 
-      this.mountHTML(processedText, 'rst-html-content');
+      this.mountHTML(processedText, 'rst-html-content', options);
     }
   };
 }
 
 if (typeof JSONRenderer === 'undefined') {
   window.JSONRenderer = class extends BaseRenderer {
-  render(jsonObj) {
-    const innerLayer = this.createLayer();
-    const content = document.createElement('div');
-    content.className = 'rst-content rst-json-content';
-    content.appendChild(this.createCollapsibleJSON(jsonObj, 0, null, true));
-    innerLayer.appendChild(content);
+  render(jsonObj, options) {
+    this.createLayer('rst-json-content', options).appendChild(this.createCollapsibleJSON(jsonObj, 0, null, true));
   }
 
   createCollapsibleJSON(obj, level = 0, key = null, startExpanded = false) {
@@ -172,13 +188,6 @@ if (typeof JSONRenderer === 'undefined') {
     closingLine.textContent = ']';
     children.appendChild(closingLine);
 
-    icon.addEventListener('mouseover', () => {
-      icon.style.color = '#333';
-    });
-    icon.addEventListener('mouseout', () => {
-      icon.style.color = '#666';
-    });
-
     summary.addEventListener('click', (e) => {
       e.stopPropagation();
       collapsed = !collapsed;
@@ -255,13 +264,6 @@ if (typeof JSONRenderer === 'undefined') {
     closingLine.textContent = '}';
     children.appendChild(closingLine);
 
-    icon.addEventListener('mouseover', () => {
-      icon.style.color = '#333';
-    });
-    icon.addEventListener('mouseout', () => {
-      icon.style.color = '#666';
-    });
-
     summary.addEventListener('click', (e) => {
       e.stopPropagation();
       collapsed = !collapsed;
@@ -317,8 +319,8 @@ if (typeof JSONRenderer === 'undefined') {
 
 if (typeof MarkdownRenderer === 'undefined') {
   window.MarkdownRenderer = class extends BaseRenderer {
-    render(markdown) {
-      this.mountHTML(MarkdownParser.toHTML(markdown), 'rst-html-content rst-markdown-content');
+    render(markdown, options) {
+      this.mountHTML(MarkdownParser.toHTML(markdown), 'rst-html-content rst-markdown-content', options);
     }
   };
 }
