@@ -311,7 +311,7 @@ Contributions are welcome! Here's how you can help:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/render-selected-text-chrome-extension.git
+git clone https://github.com/m1k3lm/render-selected-text-chrome-extension.git
 
 # Open in your editor
 cd render-selected-text-chrome-extension
@@ -342,8 +342,8 @@ MIT License - Feel free to use this extension in your projects!
 
 ## 📧 Support
 
-- **Issues:** [GitHub Issues](https://github.com/yourusername/render-selected-text-chrome-extension/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/yourusername/render-selected-text-chrome-extension/discussions)
+- **Issues:** [GitHub Issues](https://github.com/m1k3lm/render-selected-text-chrome-extension/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/m1k3lm/render-selected-text-chrome-extension/discussions)
 
 ## 🙏 Acknowledgments
 
