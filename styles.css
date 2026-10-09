@@ -473,8 +473,9 @@
   display: none;
 }
 
+/* Inline so a trailing comma stays on the closing bracket's line; child items are blocks and still stack. */
 .rst-children.visible {
-  display: block;
+  display: inline;
 }
 
 .rst-key {

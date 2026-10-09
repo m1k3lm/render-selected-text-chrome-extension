@@ -95,6 +95,8 @@ if (typeof HTMLRenderer === 'undefined') {
 
 if (typeof JSONRenderer === 'undefined') {
   window.JSONRenderer = class extends BaseRenderer {
+  static EXPANDED_LEVELS = 2;
+
   render(jsonObj, options) {
     this.createLayer('rst-json-content', options).appendChild(this.createCollapsibleJSON(jsonObj, 0, null, true));
   }
@@ -171,7 +173,7 @@ if (typeof JSONRenderer === 'undefined') {
     obj.forEach((item, idx) => {
       const itemDiv = document.createElement('div');
       itemDiv.className = 'rst-child-item';
-      itemDiv.appendChild(this.createCollapsibleJSON(item, level + 1));
+      itemDiv.appendChild(this.createCollapsibleJSON(item, level + 1, null, level + 1 < JSONRenderer.EXPANDED_LEVELS));
 
       if (idx < obj.length - 1) {
         const comma = document.createElement('span');
@@ -247,7 +249,7 @@ if (typeof JSONRenderer === 'undefined') {
     keys.forEach((k, idx) => {
       const itemDiv = document.createElement('div');
       itemDiv.className = 'rst-child-item';
-      itemDiv.appendChild(this.createCollapsibleJSON(obj[k], level + 1, k));
+      itemDiv.appendChild(this.createCollapsibleJSON(obj[k], level + 1, k, level + 1 < JSONRenderer.EXPANDED_LEVELS));
 
       if (idx < keys.length - 1) {
         const comma = document.createElement('span');
