@@ -24,6 +24,7 @@ Automatically detects and parses:
 - **JSON** - Standard JSON objects and arrays
 - **Ruby** - Ruby hashes with symbols (`:key=>value`)
 - **PHP** - PHP arrays (`array('key' => 'value')`)
+- **TOON** - [Token-Oriented Object Notation](https://github.com/toon-format/spec) (`users[2]{id,name}:`), shown as a JSON tree
 - **Markdown** - Headings, lists, tables, code blocks and more (raw HTML inside is shown as text)
 - **HTML** - Raw HTML content
 

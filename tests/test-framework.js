@@ -94,6 +94,17 @@ const TestFramework = {
           throw new Error('toContain() can only be used with arrays or strings');
         }
       },
+      toThrow() {
+        if (typeof actual !== 'function') {
+          throw new Error('toThrow() expects a function');
+        }
+        try {
+          actual();
+        } catch (error) {
+          return;
+        }
+        throw new Error('Expected function to throw');
+      },
       toHaveProperty(prop) {
         if (typeof actual !== 'object' || actual === null) {
           throw new Error(`Expected object but got ${JSON.stringify(actual)}`);

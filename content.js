@@ -5,7 +5,7 @@ if (!window.rstInitialized) {
   const htmlRenderer = new HTMLRenderer();
   const markdownRenderer = new MarkdownRenderer();
 
-  // Chrome's contextMenus selectionText drops line breaks, which Markdown needs to tell blocks apart.
+  // Chrome's contextMenus selectionText drops line breaks, which TOON and Markdown need to tell lines apart.
   const readPageSelection = () => {
     const field = document.activeElement;
     if (typeof field?.selectionStart === 'number') {
@@ -25,9 +25,12 @@ if (!window.rstInitialized) {
     }
 
     const pageSelection = readPageSelection();
-    const markdown = pageSelection.trim() ? pageSelection : text;
-    if (MarkdownParser.isMarkdown(markdown)) {
-      markdownRenderer.render(markdown, { theme, format: 'markdown' });
+    const multilineText = pageSelection.trim() ? pageSelection : text;
+    const toon = TOONParser.parse(multilineText);
+    if (toon !== null) {
+      jsonRenderer.render(toon, { theme, format: 'toon' });
+    } else if (MarkdownParser.isMarkdown(multilineText)) {
+      markdownRenderer.render(multilineText, { theme, format: 'markdown' });
     } else {
       htmlRenderer.render(text, { theme, format: 'html' });
     }
